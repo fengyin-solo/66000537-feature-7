@@ -5,6 +5,40 @@ export interface Device {
   uptime: number; quality_rate: number
 }
 
+export interface DeviceTypeInfo {
+  value: string
+  label: string
+}
+
+export type RuleField = 'temp_limit' | 'vib_limit' | 'pres_limit' | 'period' | 'consecutive'
+
+export interface AnomalyRuleConfig {
+  device_type: string
+  temp_limit: number
+  vib_limit: number
+  pres_limit: number
+  period: number
+  consecutive: number
+  updated_at?: number
+}
+
+export interface RuleFieldBound {
+  label: string
+  min: number
+  max: number
+}
+
+export type RuleBounds = Record<RuleField, RuleFieldBound>
+
+export interface RulesResponse {
+  rules: Record<string, AnomalyRuleConfig>
+  apply_mode: 'future' | 'recompute'
+  bounds: RuleBounds
+}
+
+export type RuleForm = Record<RuleField, string>
+export type RuleErrors = Partial<Record<RuleField, string>>
+
 export interface Anomaly {
   timestamp: number; triggers: { device_id: number; rule: string; value: number; threshold: string }[]
   device_type: string

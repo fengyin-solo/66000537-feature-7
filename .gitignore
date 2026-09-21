@@ -234,3 +234,6 @@ sandbox/
 *.pid
 *.seed
 *.pid.lock
+
+# 运行时数据（SQLite）
+backend/data/
