@@ -6,6 +6,7 @@
         <span class="ws-dot" :class="{on: store.connected}"></span>
         <span>{{ store.connected ? '实时连接中' : '连接断开' }}</span>
         <span class="prod-count">今日产量: {{ store.data?.production || 0 }}</span>
+        <el-button size="small" plain type="primary" @click="ruleSettings?.open()">⚙️ 异常判定规则</el-button>
       </div>
     </header>
     <div class="main-grid">
@@ -20,19 +21,22 @@
       <TrendPanel />
       <FaultPie />
     </div>
+    <RuleSettings ref="ruleSettings" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import FactoryScene from './components/FactoryScene.vue'
 import DeviceList from './components/DeviceList.vue'
 import AnomalyList from './components/AnomalyList.vue'
 import OEEChart from './components/OEEChart.vue'
 import TrendPanel from './components/TrendPanel.vue'
 import FaultPie from './components/FaultPie.vue'
+import RuleSettings from './components/RuleSettings.vue'
 import { useFactoryStore } from './store/factory'
 const store = useFactoryStore()
+const ruleSettings = ref<InstanceType<typeof RuleSettings> | null>(null)
 onMounted(() => store.connect())
 onUnmounted(() => store.disconnect())
 </script>

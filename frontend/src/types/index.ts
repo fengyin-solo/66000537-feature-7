@@ -6,8 +6,51 @@ export interface Device {
 }
 
 export interface Anomaly {
-  timestamp: number; triggers: { device_id: number; rule: string; value: number; threshold: string }[]
+  timestamp: number; triggers: { device_id: number; rule: string; value: number; threshold: number | string }[]
   device_type: string
+}
+
+// ---- 异常判定规则（按设备类型分别配置） ----
+export interface DeviceRule {
+  temperature: number
+  vibration: number
+  pressure: number
+  period: number        // 判定周期（秒）
+  consecutive: number   // 连续超限次数
+}
+
+export type RuleMode = 'future' | 'recompute'
+
+export interface RuleConfig {
+  mode: RuleMode
+  devices: Record<string, DeviceRule>
+}
+
+export interface MetricMeta {
+  label: string; unit: string; min: number; max: number; default: number
+}
+
+export interface RulesMeta {
+  config: RuleConfig
+  device_types: string[]
+  modes: Record<RuleMode, string>
+  metrics: Record<'temperature' | 'vibration' | 'pressure', MetricMeta>
+  period_range: [number, number]
+  consecutive_range: [number, number]
+}
+
+export interface RuleError {
+  field: string
+  message: string
+}
+
+export const DEVICE_TYPE_LABELS: Record<string, string> = {
+  CNC: 'CNC 数控机床',
+  RobotArm: '机械臂',
+  Conveyor: '传送带',
+  AGV: 'AGV 小车',
+  InjectionMolding: '注塑机',
+  QCStation: '质检站',
 }
 
 export interface OEEItem {
